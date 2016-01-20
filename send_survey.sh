@@ -64,9 +64,9 @@ safety_countdown () {
 
 	seconds=$2
 	while [ $seconds -gt 0 ]; do
-	   echo -ne "Safety countdown: $seconds\033[0K\r"
-	   sleep 1
-	   seconds=$[$seconds -1]
+		echo -ne "Safety countdown: $seconds\033[0K\r"
+		sleep 1
+		seconds=$[$seconds -1]
 	done
 
 	echo
@@ -84,29 +84,29 @@ NUMTOTAL=$(wc -l $1 | awk '{ print $1 }')
 safety_countdown $NUMTOTAL 60
 
 while read -r line; do
-    TIMESTAMP=$(date +%H:%M:%S)
-    PROGRESS="($COUNT of $NUMTOTAL)"
+	TIMESTAMP=$(date +%H:%M:%S)
+	PROGRESS="($COUNT of $NUMTOTAL)"
 
-    # parse input
-    read -r RECIPIENT URL PROJECT REVISION <<< "${line//\"/}"
-    URL=${URL//\?/\\\?}
-    URL=${URL//\./\\\.}
-    URL=${URL//\//\\\/}
-    URL=${URL//\&/\\\&}
-    SUBJECT="${PROJECT} ${SUBJECTTEMPLATE}"
+	# parse input
+	read -r RECIPIENT URL PROJECT REVISION <<< "${line//\"/}"
+	URL=${URL//\?/\\\?}
+	URL=${URL//\./\\\.}
+	URL=${URL//\//\\\/}
+	URL=${URL//\&/\\\&}
+	SUBJECT="${PROJECT} ${SUBJECTTEMPLATE}"
 
-    [ $COUNT -eq 1 ] && [ $RECIPIENT == "email" ] && ( echo "$TIMESTAMP skipping header" | tee -a $LOG ) && NUMTOTAL=$[$NUMTOTAL -1] && echo && continue
+	[ $COUNT -eq 1 ] && [ $RECIPIENT == "email" ] && ( echo "$TIMESTAMP skipping header" | tee -a $LOG ) && NUMTOTAL=$[$NUMTOTAL -1] && echo && continue
 
-    # fill data into placeholders and fire
-    sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | mutt -F $MAILCONFIGFILE -s "$SUBJECT" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
-    RET=$?
-    if [ $RET -eq 0 ]; then STATUS="OK"; else STATUS="ERROR"; fi
-    echo "$TIMESTAMP $STATUS $PROGRESS mail sent to "\"$RECIPIENT\"" with return code $(echo $RET)" | tee -a $LOG
+	# fill data into placeholders and fire
+	sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | mutt -F $MAILCONFIGFILE -s "$SUBJECT" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
+	RET=$?
+	if [ $RET -eq 0 ]; then STATUS="OK"; else STATUS="ERROR"; fi
+	echo "$TIMESTAMP $STATUS $PROGRESS mail sent to "\"$RECIPIENT\"" with return code $(echo $RET)" | tee -a $LOG
 
-    COUNT=$[$COUNT +1]
+	COUNT=$[$COUNT +1]
 
 	# give the mailserver a break
-    [ $(( $COUNT % 100 )) -eq 0 ] && ( echo "$TIMESTAMP sleeping for $TIMEOUT" | tee -a $LOG ) && sleep $TIMEOUT
+	[ $(( $COUNT % 100 )) -eq 0 ] && ( echo "$TIMESTAMP sleeping for $TIMEOUT" | tee -a $LOG ) && sleep $TIMEOUT
 
 	echo
 done < $1
