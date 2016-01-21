@@ -110,11 +110,11 @@ while read -r line; do
 
 	if [ $PRETEND ]; then
 		# fill data into placeholders and print message to stdout
-		echo "Subject: $SUBJECT" | tee -a ${TMPDIR}/mail.$COUNT
-		echo "From: $MAILFROM" | tee -a ${TMPDIR}/mail.$COUNT
-		echo "To: $RECIPIENT" | tee -a ${TMPDIR}/mail.$COUNT
-		echo | tee -a ${TMPDIR}/mail.$COUNT
-		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT
+		echo "> Subject: $SUBJECT" | tee -a ${TMPDIR}/mail.$COUNT
+		echo "> From: $MAILFROM" | tee -a ${TMPDIR}/mail.$COUNT
+		echo "> To: $RECIPIENT" | tee -a ${TMPDIR}/mail.$COUNT
+		echo "> " | tee -a ${TMPDIR}/mail.$COUNT
+		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" -e "s/^/> /" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT
 		echo
 	else
 		# fill data into placeholders and fire
