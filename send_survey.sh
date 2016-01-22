@@ -84,7 +84,6 @@ while getopts "hp" opt; do
 done
 
 if [ -z $1 ] || [ ! -f $1 ]; then echo "Recipient file not found!"; usage; exit 1; fi
-if [ ! -f $MAILCONFIGFILE ]; then echo "MAILCONFIGFILE not found: $MAILCONFIGFILE"; usage; exit 1; fi
 if [ ! -f $BODYTEMPLATEFILE ]; then echo "BODYTEMPLATEFILE not found: $BODYTEMPLATEFILE"; usage; exit 1; fi
 
 [ -d $TMPDIR ] || mkdir $TMPDIR || ( echo "$TMPDIR could not be created." && exit 2 )
