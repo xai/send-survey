@@ -30,12 +30,12 @@ from smtplib import SMTP
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--sender", help="set From address", type=str, required=True)
-    parser.add_argument("-b", "--bcc", help="set Bcc address", type=str)
     parser.add_argument("-m", "--mailserver", help="set smtp server", type=str, required=True)
-    parser.add_argument("-s", "--subject", help="set subject", type=str, required=True)
     parser.add_argument("-u", "--user", help="set smtp user", type=str, required=True)
     parser.add_argument("-p", "--password", help="set smtp password", type=str, required=True)
+    parser.add_argument("-f", "--sender", help="set From address", type=str, required=True)
+    parser.add_argument("-s", "--subject", help="set subject", type=str, required=True)
+    parser.add_argument("-b", "--bcc", help="set Bcc address", type=str)
     parser.add_argument("recp", default=[], nargs="+", type=str)
     args = parser.parse_args()
 
