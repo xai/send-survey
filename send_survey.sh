@@ -119,7 +119,7 @@ while read -r line; do
 		echo
 	else
 		# fill data into placeholders and fire
-		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | ./send_mail.py -m $MAILSERVER -u $MAILUSER -p $MAILPASSWORD -s "$SUBJECT" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
+		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | ./send_mail.py -m $MAILSERVER -u $MAILUSER -p $MAILPASSWORD -s "$SUBJECT" -f "\"$MAILFROM\"" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
 	fi
 	RET=$?
 	if [ $RET -eq 0 ]; then STATUS="OK"; else STATUS="ERROR"; fi
