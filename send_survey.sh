@@ -28,17 +28,17 @@ MAILSERVER=localhost
 MAILUSER=me
 MAILPASSWORD=mypassword
 
+# CHANGE THIS: templates
+# body template contains the placeholders $PROJECT, $REVISION, and $URL
+BODYTEMPLATEFILE=email_body.txt
+SUBJECTTEMPLATE="fill in subject here"
+
 # global settings
 TIMEOUT="30m"
 COUNT=1
 TMPDIR=/tmp/survey
 LOG=/tmp/survey/summary.log
 MAILLOG=/tmp/survey/mail.log
-
-# templates
-# body template contains the placeholders $PROJECT, $REVISION, and $URL
-BODYTEMPLATEFILE=email_body.txt
-SUBJECTTEMPLATE="community study"
 
 usage () {
 	echo >&2
