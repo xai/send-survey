@@ -23,10 +23,10 @@
 # SOFTWARE.
 
 # CHANGE THIS: mail settings
-MAILFROM=me@example.com
-MAILSERVER=localhost
-MAILUSER=me
-MAILPASSWORD=mypassword
+MAILFROM=
+MAILSERVER=
+MAILUSER=
+MAILPASSWORD=
 
 # CHANGE THIS: templates
 # body template contains the placeholders $PROJECT, $REVISION, and $URL
@@ -84,6 +84,7 @@ while getopts "hp" opt; do
 done
 
 if [ -z $1 ] || [ ! -f $1 ]; then echo "Recipient file not found!"; usage; exit 1; fi
+if [ -z $MAILFROM ] || [ -z $MAILSERVER ] || [ -z $MAILUSER ] || [ -z $MAILPASSWORD ] ; then echo "You need to configure the script!"; exit 1; fi
 if [ ! -f $BODYTEMPLATEFILE ]; then echo "BODYTEMPLATEFILE not found: $BODYTEMPLATEFILE"; usage; exit 1; fi
 
 [ -d $TMPDIR ] || mkdir $TMPDIR || ( echo "$TMPDIR could not be created." && exit 2 )
