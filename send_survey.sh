@@ -23,15 +23,17 @@
 # SOFTWARE.
 
 # CHANGE THIS: mail settings
-MAILCONFIGFILE=~/.muttrc
 MAILFROM=me@example.com
+MAILSERVER=localhost
+MAILUSER=me
+MAILPASSWORD=mypassword
 
 # global settings
 TIMEOUT="30m"
 COUNT=1
 TMPDIR=/tmp/survey
 LOG=/tmp/survey/summary.log
-MAILLOG=/tmp/survey/mutt.log
+MAILLOG=/tmp/survey/mail.log
 
 # templates
 # body template contains the placeholders $PROJECT, $REVISION, and $URL
@@ -53,7 +55,7 @@ usage () {
 	echo >&2 "This would be a valid line:"
 	echo >&2 "\"john.doe@example.com\" \"https://example.com/link/to/survey.php?some.params=42&other.params=42\" \"Perl\" \"v5.19.0\""
 	echo >&2
-	echo >&2 "Also, make sure to configure the script and mutt before executing it!"
+	echo >&2 "Also, make sure to configure the script before executing it!"
 }
 
 safety_countdown () {
@@ -118,7 +120,7 @@ while read -r line; do
 		echo
 	else
 		# fill data into placeholders and fire
-		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | mutt -F $MAILCONFIGFILE -s "$SUBJECT" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
+		sed -e "s/\$PROJECT/$PROJECT/" -e "s/\$REVISION/$REVISION/" -e "s/\$URL/$URL/" < $BODYTEMPLATEFILE | tee -a ${TMPDIR}/mail.$COUNT | ./send_mail.py -m $MAILSERVER -u $MAILUSER -p $MAILPASSWORD -s "$SUBJECT" -b "\"$MAILFROM\"" "\"$RECIPIENT\"" 2>&1 | tee -a $MAILLOG
 	fi
 	RET=$?
 	if [ $RET -eq 0 ]; then STATUS="OK"; else STATUS="ERROR"; fi
